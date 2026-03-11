@@ -12,7 +12,8 @@ export default defineConfig(({ mode }) => {
     return {
       server: {
         port: 3000,
-        host: '0.0.0.0',
+        // host: '0.0.0.0',
+        host: '44.215.191.213',
         proxy: {
           '/api': {
             target: 'http://localhost:8080',
