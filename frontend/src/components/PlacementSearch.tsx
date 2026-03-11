@@ -120,13 +120,21 @@ const PlacementSearch: React.FC<PlacementSearchProps> = ({
   };
   
   const sortedResults = useMemo(() => {
+    // if no sort config is set just return the original array (shallow copy)
+    if (!sortConfig) {
+      return [...results];
+    }
+
+    const { key, order } = sortConfig;
+
     return [...results].sort((a, b) => {
-        if (!sortConfig) return 0;
-        const key = sortConfig.key;
-        const order = sortConfig.order;
-        if (a[key] < b[key]) return order === 'asc' ? -1 : 1;
-        if (a[key] > b[key]) return order === 'asc' ? 1 : -1;
-        return 0;
+      // coerce value to string for comparison, guarding against undefined/null
+      const aVal = (a[key] ?? '') as string | number;
+      const bVal = (b[key] ?? '') as string | number;
+
+      if (aVal < bVal) return order === 'asc' ? -1 : 1;
+      if (aVal > bVal) return order === 'asc' ? 1 : -1;
+      return 0;
     });
   }, [results, sortConfig]);
   
